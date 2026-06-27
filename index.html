@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Zasha Prompt Builder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --navy:#1F2F65;
+    --navy-deep:#162149;
+    --gold:#C9A227;
+    --gold-soft:#E3C45A;
+    --paper:#F6F7FB;
+    --line:#E2E5F0;
+    --ink:#1B2138;
+    --muted:#6B7290;
+    --white:#FFFFFF;
+    --ok:#1E7F52;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Plus Jakarta Sans',system-ui,sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* Header */
+  header{
+    background:linear-gradient(135deg,var(--navy) 0%,var(--navy-deep) 100%);
+    color:var(--white);
+    padding:22px 20px;
+    border-bottom:3px solid var(--gold);
+  }
+  .head-inner{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+  .logo{
+    width:42px;height:42px;border-radius:11px;
+    background:linear-gradient(135deg,var(--gold) 0%,var(--gold-soft) 100%);
+    display:flex;align-items:center;justify-content:center;
+    font-weight:800;color:var(--navy);font-size:18px;letter-spacing:-1px;
+    box-shadow:0 4px 14px rgba(201,162,39,.35);
+  }
+  .head-title{font-size:19px;font-weight:800;letter-spacing:-.3px;}
+  .head-title span{color:var(--gold-soft);}
+  .head-sub{font-size:12.5px;color:#B9C0DC;margin-top:1px;}
+  .head-badge{
+    margin-left:auto;font-size:11.5px;font-weight:600;
+    background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);
+    padding:6px 12px;border-radius:999px;color:#D8DDF0;
+  }
+
+  /* Layout */
+  .wrap{max-width:1180px;margin:0 auto;padding:24px 20px 60px;display:grid;grid-template-columns:1fr 1fr;gap:22px;}
+  @media(max-width:880px){.wrap{grid-template-columns:1fr;}}
+
+  .card{
+    background:var(--white);border:1px solid var(--line);border-radius:16px;
+    box-shadow:0 1px 2px rgba(31,47,101,.04);overflow:hidden;
+  }
+  .card-head{
+    padding:15px 18px;border-bottom:1px solid var(--line);
+    display:flex;align-items:center;gap:9px;
+  }
+  .card-head .dot{width:8px;height:8px;border-radius:50%;background:var(--gold);}
+  .card-head h2{margin:0;font-size:14.5px;font-weight:700;letter-spacing:-.2px;}
+  .card-head .hint{margin-left:auto;font-size:11.5px;color:var(--muted);}
+  .card-body{padding:18px;}
+
+  /* Form */
+  .field{margin-bottom:15px;}
+  .field:last-child{margin-bottom:0;}
+  label.lbl{display:block;font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:6px;}
+  label.lbl b{color:var(--gold);font-weight:700;}
+  .desc{font-size:11px;color:var(--muted);font-weight:400;}
+  input[type=text],textarea{
+    width:100%;font-family:inherit;font-size:13.5px;color:var(--ink);
+    background:var(--paper);border:1px solid var(--line);border-radius:10px;
+    padding:10px 12px;transition:border-color .15s,background .15s;
+  }
+  input[type=text]:focus,textarea:focus{
+    outline:none;border-color:var(--navy);background:var(--white);
+    box-shadow:0 0 0 3px rgba(31,47,101,.08);
+  }
+  textarea{resize:vertical;min-height:62px;line-height:1.45;}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  @media(max-width:480px){.row2{grid-template-columns:1fr;}}
+
+  .check{
+    display:flex;align-items:center;gap:10px;background:var(--paper);
+    border:1px solid var(--line);border-radius:10px;padding:11px 12px;cursor:pointer;
+  }
+  .check input{width:17px;height:17px;accent-color:var(--navy);cursor:pointer;}
+  .check span{font-size:13px;font-weight:600;}
+  .check small{display:block;font-size:11px;color:var(--muted);font-weight:400;}
+
+  .actions{display:flex;gap:10px;margin-top:4px;}
+  .btn{
+    font-family:inherit;font-size:13.5px;font-weight:700;cursor:pointer;
+    border:none;border-radius:10px;padding:12px 18px;transition:transform .08s,filter .15s;
+  }
+  .btn:active{transform:translateY(1px);}
+  .btn-primary{background:var(--navy);color:var(--white);flex:1;}
+  .btn-primary:hover{filter:brightness(1.12);}
+  .btn-gold{background:var(--gold);color:var(--navy);}
+  .btn-gold:hover{filter:brightness(1.06);}
+  .btn-ghost{background:transparent;border:1px solid var(--line);color:var(--muted);}
+  .btn-ghost:hover{border-color:var(--navy);color:var(--navy);}
+
+  /* Output */
+  .out{
+    font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.6;
+    color:var(--ink);background:#FBFBFE;border:1px solid var(--line);border-radius:12px;
+    padding:16px;white-space:pre-wrap;word-break:break-word;max-height:520px;overflow:auto;
+  }
+  .out.empty{color:var(--muted);font-family:inherit;font-size:13px;text-align:center;padding:40px 16px;}
+  .out-actions{display:flex;gap:10px;margin-top:14px;}
+
+  /* History */
+  .hist-list{display:flex;flex-direction:column;gap:8px;max-height:320px;overflow:auto;}
+  .hist-item{
+    display:flex;align-items:center;gap:12px;padding:11px 13px;border:1px solid var(--line);
+    border-radius:10px;cursor:pointer;transition:border-color .15s,background .15s;
+  }
+  .hist-item:hover{border-color:var(--gold);background:#FFFDF6;}
+  .hist-meta{flex:1;min-width:0;}
+  .hist-title{font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .hist-time{font-size:11px;color:var(--muted);}
+  .hist-del{
+    background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;
+    padding:2px 6px;border-radius:6px;line-height:1;
+  }
+  .hist-del:hover{color:#C0392B;background:#FBEAE8;}
+  .hist-empty{font-size:12.5px;color:var(--muted);text-align:center;padding:24px 10px;}
+
+  .note{
+    font-size:11.5px;color:var(--muted);background:var(--paper);border:1px dashed var(--line);
+    border-radius:9px;padding:9px 11px;margin-top:12px;line-height:1.45;
+  }
+  .note b{color:var(--navy);}
+  .pill{display:inline-block;font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:999px;}
+  .pill-cloud{background:#E6F0EA;color:var(--ok);}
+  .pill-local{background:#FBF1DC;color:#9A7B14;}
+
+  .toast{
+    position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);
+    background:var(--navy);color:var(--white);font-size:13px;font-weight:600;
+    padding:11px 20px;border-radius:999px;box-shadow:0 8px 24px rgba(31,47,101,.3);
+    opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:50;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="head-inner">
+    <div class="logo">ZS</div>
+    <div>
+      <div class="head-title">Zasha <span>Prompt Builder</span></div>
+      <div class="head-sub">Bikin prompt gambar tertata — struktur tetap konsisten</div>
+    </div>
+    <div class="head-badge" id="storeBadge">Riwayat: memeriksa…</div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- KIRI: FORM -->
+  <div class="card">
+    <div class="card-head">
+      <span class="dot"></span>
+      <h2>Isi konten poster</h2>
+      <span class="hint">Template: Fitur Baru</span>
+    </div>
+    <div class="card-body">
+
+      <div class="row2">
+        <div class="field">
+          <label class="lbl">Judul 1 <span class="desc">(putih)</span></label>
+          <input type="text" id="judul1" placeholder="FITUR BARU UNLOCK" />
+        </div>
+        <div class="field">
+          <label class="lbl">Judul 2 <span class="desc">(emas)</span></label>
+          <input type="text" id="judul2" placeholder="MLIJO" />
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="lbl">Objek Utama</label>
+        <input type="text" id="objek" placeholder="Seorang ibu pedagang sayur keliling (Mlijo) khas Jawa." />
+      </div>
+
+      <div class="field">
+        <label class="lbl">Aktivitas Objek</label>
+        <textarea id="aktivitas" placeholder="Sedang mengendarai sepeda pancal klasik sambil membawa berbagai macam sayuran segar."></textarea>
+      </div>
+
+      <div class="row2">
+        <div class="field">
+          <label class="lbl">Ekspresi</label>
+          <input type="text" id="ekspresi" placeholder="Tersenyum ramah, percaya diri, melihat ke kamera." />
+        </div>
+        <div class="field">
+          <label class="lbl">Pakaian</label>
+          <input type="text" id="pakaian" placeholder="Kerudung coklat, daster batik sederhana." />
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="lbl">Latar Belakang</label>
+        <textarea id="latar" placeholder="Jalan kampung Indonesia pagi hari, rumah sederhana, pepohonan hijau, sinar matahari hangat, sedikit embun."></textarea>
+      </div>
+
+      <div class="field">
+        <label class="lbl">Nuansa</label>
+        <input type="text" id="nuansa" placeholder="Hangat, ramah, profesional, khas Indonesia." />
+      </div>
+
+      <div class="field">
+        <label class="lbl">Detail tambahan <span class="desc">(opsional — 1 baris = 1 detail, format "Nama: isi")</span></label>
+        <textarea id="detail" placeholder="Sepeda: pancal klasik hitam dengan keranjang depan & belakang.&#10;Isi Keranjang: sawi, kangkung, bayam, wortel, tomat, cabai, terong, kol."></textarea>
+      </div>
+
+      <div class="field">
+        <label class="check">
+          <input type="checkbox" id="koin" checked />
+          <span>Tampilkan koin "Rp" emas <small>di pojok kanan atas</small></span>
+        </label>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-primary" onclick="generate()">Generate prompt</button>
+        <button class="btn btn-ghost" onclick="resetForm()">Kosongkan</button>
+      </div>
+
+      <div class="note">
+        <b>Catatan:</b> bagian yang tetap (rasio, warna, gaya judul, footer 3 kolom, tipografi, negative prompt) sudah dikunci otomatis — kamu cukup isi konten di atas.
+      </div>
+
+    </div>
+  </div>
+
+  <!-- KANAN: OUTPUT + RIWAYAT -->
+  <div style="display:flex;flex-direction:column;gap:22px;">
+
+    <div class="card">
+      <div class="card-head">
+        <span class="dot"></span>
+        <h2>Prompt jadi</h2>
+        <span class="hint">siap copy</span>
+      </div>
+      <div class="card-body">
+        <div class="out empty" id="output">Isi form di kiri, lalu tekan “Generate prompt”. Hasilnya muncul di sini.</div>
+        <div class="out-actions" id="outActions" style="display:none;">
+          <button class="btn btn-gold" style="flex:1" onclick="copyOut()">Salin prompt</button>
+          <button class="btn btn-ghost" onclick="saveHistory()">Simpan ke riwayat</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <span class="dot"></span>
+        <h2>Riwayat prompt</h2>
+        <span class="hint" id="histCount"></span>
+      </div>
+      <div class="card-body">
+        <div class="hist-list" id="histList">
+          <div class="hist-empty">Belum ada riwayat. Generate lalu simpan untuk menyimpan prompt bagus.</div>
+        </div>
+        <div class="note" id="fbNote" style="display:none;">
+          <b>Riwayat lokal:</b> tersimpan di browser ini saja. Biar bisa diakses dari HP/laptop lain, isi konfigurasi Firebase di dalam file (bagian <b>firebaseConfig</b>).
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Firebase (opsional, untuk sinkron riwayat antar device) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+
+<script>
+/* =========================================================
+   KONFIGURASI FIREBASE (OPSIONAL)
+   ---------------------------------------------------------
+   Biarkan apa adanya = riwayat tersimpan di browser ini saja.
+   Mau sinkron antar device? Ganti nilai di bawah dengan
+   config Firebase Realtime Database punyamu, lalu set rules.
+   ========================================================= */
+const firebaseConfig = {
+  apiKey:      "ISI_API_KEY_KAMU",
+  authDomain:  "ISI_PROJECT.firebaseapp.com",
+  databaseURL: "https://ISI_PROJECT-default-rtdb.firebaseio.com",
+  projectId:   "ISI_PROJECT_ID"
+};
+
+/* ---------- Skeleton tetap (jangan diubah lewat form) ---------- */
+const FIXED = {
+  rasio: "1:1 (Persegi)",
+  resolusi: "2048 x 2048",
+  gaya: "Poster promosi modern, premium, ilustrasi semi realistis, clean design, kualitas sangat tajam, pencahayaan pagi yang hangat, komposisi simetris, cocok untuk media sosial.",
+  warna: "Navy Gelap (#1F2F65), Emas (#C9A227), Putih.",
+  posisi: "Berada di tengah poster sebagai fokus utama.",
+  styleJudul: "Huruf kapital besar, tebal, modern, efek 3D premium, Judul 1 berwarna putih, Judul 2 berwarna emas metalik mengkilap.",
+  styleFooter: 'Tanpa tanda "=". Judul website berwarna emas. Subjudul berwarna putih. Ikon berada di dalam lingkaran putih. Setiap kolom dipisahkan garis vertikal tipis berwarna emas.',
+  komposisi: "Header besar di bagian atas. Objek utama di tengah. Footer memenuhi bagian bawah. Semua elemen simetris dan seimbang.",
+  tipografi: "Sangat tajam, mudah dibaca, tidak ada typo, tidak ada teks tambahan selain yang ditentukan.",
+  negative: "Jangan menambahkan logo lain, watermark, typo, teks acak, tangan cacat, jari berlebih, wajah rusak, objek terpotong, ikon blur, layout berantakan, perspektif aneh, kualitas rendah."
+};
+
+let lastPrompt = "";
+
+function val(id, fallback){
+  const v = document.getElementById(id).value.trim();
+  return v || fallback || "";
+}
+
+function generate(){
+  const judul1 = val("judul1","FITUR BARU UNLOCK").toUpperCase();
+  const judul2 = val("judul2","MLIJO").toUpperCase();
+  const objek = val("objek");
+  const aktivitas = val("aktivitas");
+  const ekspresi = val("ekspresi","Tersenyum ramah, percaya diri, melihat ke arah kamera.");
+  const pakaian = val("pakaian");
+  const latar = val("latar");
+  const nuansa = val("nuansa","Hangat, ramah, profesional, khas Indonesia.");
+  const detailRaw = document.getElementById("detail").value.trim();
+  const koin = document.getElementById("koin").checked;
+
+  if(!objek){ toast("Isi dulu Objek Utama"); return; }
+
+  let lines = [];
+  lines.push("Rasio: " + FIXED.rasio);
+  lines.push("Resolusi: " + FIXED.resolusi);
+  lines.push("Gaya: " + FIXED.gaya);
+  lines.push("Warna Utama: " + FIXED.warna);
+  if(nuansa) lines.push("Nuansa: " + nuansa);
+  if(latar) lines.push("Latar Belakang: " + latar);
+  lines.push("Objek Utama: " + objek);
+  if(aktivitas) lines.push("Aktivitas Objek: " + aktivitas);
+  if(ekspresi) lines.push("Ekspresi: " + ekspresi);
+  if(pakaian) lines.push("Pakaian: " + pakaian);
+
+  // detail tambahan, satu per baris
+  if(detailRaw){
+    detailRaw.split("\n").map(s=>s.trim()).filter(Boolean).forEach(d=>lines.push(d));
+  }
+
+  lines.push("Posisi Objek: " + FIXED.posisi);
+  lines.push("Judul 1: " + judul1);
+  lines.push("Judul 2: " + judul2);
+  lines.push("Style Judul: " + FIXED.styleJudul);
+  lines.push("Deskripsi: Tidak ada.");
+  lines.push("Panel Icon: Tidak ada.");
+  lines.push("Panel Keunggulan: Tidak ada.");
+  lines.push("Panel Bonus: Tidak ada.");
+  lines.push("Koin Dekorasi: " + (koin ? 'Koin emas bertuliskan "Rp" mengkilap di pojok kanan atas.' : "Tidak ada."));
+  lines.push("CTA Utama: Tidak ada.");
+  lines.push("Mockup Smartphone: Tidak ada.");
+  lines.push("Footer: Panel penuh berwarna navy gelap dengan sudut membulat di bagian paling bawah.");
+  lines.push("Footer Kolom 1: Icon Globe. Judul: zasha.online. Subjudul: web pelanggan.");
+  lines.push("Footer Kolom 2: Icon Users. Judul: mitra.zasha.online. Subjudul: untuk Mitra.");
+  lines.push("Footer Kolom 3: Icon Dokumen. Judul: blog.zasha.online. Subjudul: info terbaru.");
+  lines.push("Style Footer: " + FIXED.styleFooter);
+  lines.push("Komposisi: " + FIXED.komposisi);
+  lines.push("Tipografi: " + FIXED.tipografi);
+  lines.push("Negative Prompt: " + FIXED.negative);
+
+  lastPrompt = lines.join("\n");
+  const out = document.getElementById("output");
+  out.classList.remove("empty");
+  out.textContent = lastPrompt;
+  document.getElementById("outActions").style.display = "flex";
+  toast("Prompt jadi 🎉");
+}
+
+function copyOut(){
+  if(!lastPrompt){ toast("Belum ada prompt"); return; }
+  navigator.clipboard.writeText(lastPrompt).then(()=>toast("Tersalin ke clipboard ✓"))
+    .catch(()=>toast("Gagal menyalin"));
+}
+
+function resetForm(){
+  ["judul1","judul2","objek","aktivitas","ekspresi","pakaian","latar","nuansa","detail"]
+    .forEach(id=>document.getElementById(id).value="");
+  document.getElementById("koin").checked = true;
+  toast("Form dikosongkan");
+}
+
+/* ---------------- RIWAYAT (Firebase / localStorage) ---------------- */
+let useFirebase = false;
+let db = null;
+const LS_KEY = "zasha_prompt_history";
+
+function initStore(){
+  const configured = !String(firebaseConfig.apiKey).includes("ISI_");
+  if(configured){
+    try{
+      firebase.initializeApp(firebaseConfig);
+      db = firebase.database();
+      useFirebase = true;
+      setBadge(true);
+      listenFirebase();
+      return;
+    }catch(e){ console.warn("Firebase gagal, pakai lokal:", e); }
+  }
+  setBadge(false);
+  document.getElementById("fbNote").style.display = "block";
+  renderHistory(loadLocal());
+}
+
+function setBadge(cloud){
+  const b = document.getElementById("storeBadge");
+  b.innerHTML = cloud
+    ? 'Riwayat: <span class="pill pill-cloud">Cloud · sinkron</span>'
+    : 'Riwayat: <span class="pill pill-local">Lokal · browser ini</span>';
+}
+
+function saveHistory(){
+  if(!lastPrompt){ toast("Generate dulu"); return; }
+  const judul2 = (document.getElementById("judul2").value.trim() || document.getElementById("judul1").value.trim() || "Tanpa judul").toUpperCase();
+  const item = { judul: judul2, prompt: lastPrompt, ts: Date.now() };
+
+  if(useFirebase){
+    db.ref("prompts").push(item).then(()=>toast("Tersimpan ke cloud ✓"))
+      .catch(()=>toast("Gagal simpan ke cloud"));
+  }else{
+    const list = loadLocal();
+    item.id = "L" + Date.now();
+    list.unshift(item);
+    saveLocal(list);
+    renderHistory(list);
+    toast("Tersimpan ✓");
+  }
+}
+
+function deleteHistory(id, ev){
+  ev.stopPropagation();
+  if(useFirebase){
+    db.ref("prompts/"+id).remove();
+  }else{
+    const list = loadLocal().filter(x=>x.id!==id);
+    saveLocal(list);
+    renderHistory(list);
+  }
+  toast("Dihapus");
+}
+
+function loadPrompt(p){
+  lastPrompt = p;
+  const out = document.getElementById("output");
+  out.classList.remove("empty");
+  out.textContent = p;
+  document.getElementById("outActions").style.display = "flex";
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function listenFirebase(){
+  db.ref("prompts").orderByChild("ts").on("value", snap=>{
+    const list = [];
+    snap.forEach(c=>{ const v=c.val(); v.id=c.key; list.push(v); });
+    list.reverse(); // terbaru di atas
+    renderHistory(list);
+  });
+}
+
+function renderHistory(list){
+  const box = document.getElementById("histList");
+  const count = document.getElementById("histCount");
+  count.textContent = list.length ? (list.length + " tersimpan") : "";
+  if(!list.length){
+    box.innerHTML = '<div class="hist-empty">Belum ada riwayat. Generate lalu simpan untuk menyimpan prompt bagus.</div>';
+    return;
+  }
+  box.innerHTML = "";
+  list.forEach(item=>{
+    const div = document.createElement("div");
+    div.className = "hist-item";
+    div.onclick = ()=>loadPrompt(item.prompt);
+    div.innerHTML =
+      '<div class="hist-meta">'+
+        '<div class="hist-title">'+escapeHtml(item.judul)+'</div>'+
+        '<div class="hist-time">'+fmtTime(item.ts)+'</div>'+
+      '</div>';
+    const del = document.createElement("button");
+    del.className = "hist-del";
+    del.innerHTML = "&times;";
+    del.title = "Hapus";
+    del.onclick = (e)=>deleteHistory(item.id, e);
+    div.appendChild(del);
+    box.appendChild(div);
+  });
+}
+
+/* local helpers */
+function loadLocal(){ try{ return JSON.parse(localStorage.getItem(LS_KEY))||[]; }catch(e){ return []; } }
+function saveLocal(l){ try{ localStorage.setItem(LS_KEY, JSON.stringify(l)); }catch(e){} }
+
+/* util */
+function fmtTime(ts){
+  const d = new Date(ts);
+  return d.toLocaleDateString("id-ID",{day:"2-digit",month:"short",year:"numeric"}) +
+    " · " + d.toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"});
+}
+function escapeHtml(s){ const p=document.createElement("p"); p.textContent=s; return p.innerHTML; }
+let toastT=null;
+function toast(msg){
+  const t=document.getElementById("toast");
+  t.textContent=msg; t.classList.add("show");
+  clearTimeout(toastT);
+  toastT=setTimeout(()=>t.classList.remove("show"),1900);
+}
+
+initStore();
+</script>
+</body>
+</html>
