@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Zasha Prompt Builder</title>
+<title>Zasha Prompt Builder — Mode Cepat</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -48,8 +48,16 @@
   .head-title{font-size:19px;font-weight:800;letter-spacing:-.3px;}
   .head-title span{color:var(--gold-soft);}
   .head-sub{font-size:12.5px;color:#B9C0DC;margin-top:1px;}
+  .head-nav{margin-left:auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .head-link{
+    font-size:12px;font-weight:600;text-decoration:none;color:#D8DDF0;
+    background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);
+    padding:6px 12px;border-radius:999px;transition:background .15s;
+  }
+  .head-link:hover{background:rgba(255,255,255,.2);}
+  .head-link.active{background:var(--gold);color:var(--navy);border-color:var(--gold);}
   .head-badge{
-    margin-left:auto;font-size:11.5px;font-weight:600;
+    font-size:11.5px;font-weight:600;
     background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);
     padding:6px 12px;border-radius:999px;color:#D8DDF0;
   }
@@ -77,45 +85,56 @@
   label.lbl{display:block;font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:6px;}
   label.lbl b{color:var(--gold);font-weight:700;}
   .desc{font-size:11px;color:var(--muted);font-weight:400;}
-  input[type=text],textarea{
+  input[type=text],textarea,select{
     width:100%;font-family:inherit;font-size:13.5px;color:var(--ink);
     background:var(--paper);border:1px solid var(--line);border-radius:10px;
     padding:10px 12px;transition:border-color .15s,background .15s;
   }
-  input[type=text]:focus,textarea:focus{
+  input[type=text]:focus,textarea:focus,select:focus{
     outline:none;border-color:var(--navy);background:var(--white);
     box-shadow:0 0 0 3px rgba(31,47,101,.08);
   }
   textarea{resize:vertical;min-height:62px;line-height:1.45;}
   select{
-    width:100%;font-family:inherit;font-size:13.5px;color:var(--ink);
-    background:var(--paper);border:1px solid var(--line);border-radius:10px;
-    padding:10px 12px;transition:border-color .15s,background .15s;
-    appearance:none;-webkit-appearance:none;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B7290' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-    background-repeat:no-repeat;background-position:right 12px center;cursor:pointer;
+    appearance:none;-webkit-appearance:none;cursor:pointer;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236B7290' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 12px center;padding-right:34px;
   }
-  select:focus{
-    outline:none;border-color:var(--navy);background-color:var(--white);
-    box-shadow:0 0 0 3px rgba(31,47,101,.08);
-  }
-  .color-row{display:flex;align-items:center;gap:8px;}
-  .color-row input[type=color]{
-    width:38px;height:38px;border:1px solid var(--line);border-radius:8px;
-    padding:2px;background:var(--paper);cursor:pointer;flex-shrink:0;
-  }
-  .color-row input[type=text]{flex:1;}
-  .mockup-sub{margin-top:10px;display:flex;flex-direction:column;gap:10px;}
   .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
   @media(max-width:480px){.row2{grid-template-columns:1fr;}}
 
+  /* Master jenis jasa — dibuat menonjol */
+  .master{
+    background:linear-gradient(135deg,#F3F5FC 0%,#FBFAF3 100%);
+    border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:18px;
+  }
+  .master label.lbl{margin-bottom:7px;}
+  .master select{background:var(--white);font-weight:600;font-size:14px;}
+
+  /* Color */
+  .color-row{display:flex;align-items:center;gap:8px;}
+  .color-row input[type=color]{
+    width:42px;height:38px;padding:2px;border:1px solid var(--line);border-radius:9px;
+    background:var(--white);cursor:pointer;flex-shrink:0;
+  }
+  .color-row input[type=text]{
+    font-family:'JetBrains Mono',monospace;font-size:12.5px;text-transform:uppercase;
+  }
+
+  /* Checkbox */
   .check{
     display:flex;align-items:center;gap:10px;background:var(--paper);
     border:1px solid var(--line);border-radius:10px;padding:11px 12px;cursor:pointer;
   }
-  .check input{width:17px;height:17px;accent-color:var(--navy);cursor:pointer;}
+  .check input{width:17px;height:17px;accent-color:var(--navy);cursor:pointer;flex-shrink:0;}
   .check span{font-size:13px;font-weight:600;}
   .check small{display:block;font-size:11px;color:var(--muted);font-weight:400;}
+
+  .sub{
+    margin-top:11px;padding:13px;border:1px dashed var(--line);border-radius:10px;
+    background:#FBFBFE;
+  }
+  .sub.hide{display:none;}
 
   .actions{display:flex;gap:10px;margin-top:4px;}
   .btn{
@@ -181,9 +200,13 @@
     <div class="logo">ZS</div>
     <div>
       <div class="head-title">Zasha <span>Prompt Builder</span></div>
-      <div class="head-sub">Bikin prompt gambar tertata — struktur tetap konsisten</div>
+      <div class="head-sub">Mode cepat — pilih jenis jasa, tinggal modifikasi</div>
     </div>
-    <div class="head-badge" id="storeBadge">Riwayat: memeriksa…</div>
+    <div class="head-nav">
+      <a class="head-link" href="index.html">Mode manual</a>
+      <a class="head-link active" href="cepat.html">Mode cepat</a>
+      <div class="head-badge" id="storeBadge">Riwayat: memeriksa…</div>
+    </div>
   </div>
 </header>
 
@@ -194,87 +217,109 @@
     <div class="card-head">
       <span class="dot"></span>
       <h2>Isi konten poster</h2>
-      <span class="hint">Template: Fitur Baru</span>
+      <span class="hint">Pilih jenis → auto isi</span>
     </div>
     <div class="card-body">
 
-      <!-- UKURAN -->
-      <div class="field">
-        <label class="lbl">Ukuran poster</label>
-        <select id="ukuran">
-          <option value="1:1|2048 x 2048" selected>1:1 — 2048 x 2048 (Persegi)</option>
-          <option value="4:5|1638 x 2048">4:5 — 1638 x 2048 (Portrait)</option>
-          <option value="9:16|1152 x 2048">9:16 — 1152 x 2048 (Story)</option>
-          <option value="16:9|2048 x 1152">16:9 — 2048 x 1152 (Landscape)</option>
-          <option value="3:4|1536 x 2048">3:4 — 1536 x 2048 (Portrait 3:4)</option>
+      <!-- MASTER: Jenis jasa -->
+      <div class="master">
+        <label class="lbl">Jenis jasa <span class="desc">— semua kolom terisi otomatis, tinggal ubah yang perlu</span></label>
+        <select id="jenis" onchange="fillPreset(this.value)">
+          <option value="custom">✏️ Custom (kosongkan, isi sendiri)</option>
+          <option value="rewang">Rewang Nikahan</option>
+          <option value="bangunan">Tukang Bangunan</option>
+          <option value="coding">Jasa Coding</option>
+          <option value="jastip">Jasa Titip</option>
+          <option value="bersih">Bersih Rumah</option>
+          <option value="rias">Jasa Rias</option>
+          <option value="desain">Jasa Desain</option>
+          <option value="tulis">Jasa Tulis</option>
+          <option value="servishp">Servis HP / Laptop</option>
+          <option value="elektronik">Servis Elektronik</option>
+          <option value="pijat">Jasa Pijat</option>
+          <option value="leskitab">Les Kitab / Ngaji</option>
+          <option value="curhat">Curahan Hati</option>
         </select>
       </div>
 
-      <!-- WARNA -->
-      <div class="row2">
-        <div class="field">
-          <label class="lbl">Warna Utama</label>
-          <div class="color-row">
-            <input type="color" id="warnaUtamaPicker" value="#1F2F65" oninput="syncColor('warnaUtamaPicker','warnaUtamaHex')" />
-            <input type="text" id="warnaUtamaHex" value="#1F2F65" maxlength="7" placeholder="#1F2F65" oninput="syncHex('warnaUtamaHex','warnaUtamaPicker')" />
-          </div>
-        </div>
-        <div class="field">
-          <label class="lbl">Warna Aksen</label>
-          <div class="color-row">
-            <input type="color" id="warnaAksenPicker" value="#C9A227" oninput="syncColor('warnaAksenPicker','warnaAksenHex')" />
-            <input type="text" id="warnaAksenHex" value="#C9A227" maxlength="7" placeholder="#C9A227" oninput="syncHex('warnaAksenHex','warnaAksenPicker')" />
-          </div>
-        </div>
+      <!-- Ukuran -->
+      <div class="field">
+        <label class="lbl">Ukuran <span class="desc">(rasio & resolusi)</span></label>
+        <select id="ukuran">
+          <option value="1:1 (Persegi)|2048 x 2048" selected>1:1 — Persegi (2048 × 2048) · feed IG/FB</option>
+          <option value="4:5 (Potret)|1638 x 2048">4:5 — Potret (1638 × 2048) · feed IG</option>
+          <option value="9:16 (Story)|1152 x 2048">9:16 — Story/Reels (1152 × 2048)</option>
+          <option value="16:9 (Lanskap)|2048 x 1152">16:9 — Lanskap (2048 × 1152) · banner</option>
+          <option value="3:4 (Potret)|1536 x 2048">3:4 — Potret (1536 × 2048)</option>
+        </select>
       </div>
 
       <div class="row2">
         <div class="field">
           <label class="lbl">Judul 1 <span class="desc">(putih)</span></label>
-          <input type="text" id="judul1" placeholder="FITUR BARU UNLOCK" />
+          <input type="text" id="judul1" placeholder="PUNYA KEAHLIAN?" />
         </div>
         <div class="field">
           <label class="lbl">Judul 2 <span class="desc">(emas)</span></label>
-          <input type="text" id="judul2" placeholder="MLIJO" />
+          <input type="text" id="judul2" placeholder="TUKANG BANGUNAN" />
         </div>
       </div>
 
       <div class="field">
         <label class="lbl">Objek Utama</label>
-        <input type="text" id="objek" placeholder="Seorang ibu pedagang sayur keliling (Mlijo) khas Jawa." />
+        <input type="text" id="objek" placeholder="Objek utama poster" />
       </div>
 
       <div class="field">
         <label class="lbl">Aktivitas Objek</label>
-        <textarea id="aktivitas" placeholder="Sedang mengendarai sepeda pancal klasik sambil membawa berbagai macam sayuran segar."></textarea>
+        <textarea id="aktivitas" placeholder="Apa yang sedang dilakukan objek"></textarea>
       </div>
 
       <div class="row2">
         <div class="field">
           <label class="lbl">Ekspresi</label>
-          <input type="text" id="ekspresi" placeholder="Tersenyum ramah, percaya diri, melihat ke kamera." />
+          <input type="text" id="ekspresi" placeholder="Ekspresi wajah" />
         </div>
         <div class="field">
           <label class="lbl">Pakaian</label>
-          <input type="text" id="pakaian" placeholder="Kerudung coklat, daster batik sederhana." />
+          <input type="text" id="pakaian" placeholder="Pakaian objek" />
         </div>
       </div>
 
       <div class="field">
         <label class="lbl">Latar Belakang</label>
-        <textarea id="latar" placeholder="Jalan kampung Indonesia pagi hari, rumah sederhana, pepohonan hijau, sinar matahari hangat, sedikit embun."></textarea>
+        <textarea id="latar" placeholder="Suasana & latar belakang"></textarea>
       </div>
 
       <div class="field">
         <label class="lbl">Nuansa</label>
-        <input type="text" id="nuansa" placeholder="Hangat, ramah, profesional, khas Indonesia." />
+        <input type="text" id="nuansa" placeholder="Nuansa keseluruhan" />
       </div>
 
       <div class="field">
-        <label class="lbl">Detail tambahan <span class="desc">(opsional — 1 baris = 1 detail, format "Nama: isi")</span></label>
-        <textarea id="detail" placeholder="Sepeda: pancal klasik hitam dengan keranjang depan & belakang.&#10;Isi Keranjang: sawi, kangkung, bayam, wortel, tomat, cabai, terong, kol."></textarea>
+        <label class="lbl">Detail tambahan <span class="desc">(1 baris = 1 detail, format "Nama: isi")</span></label>
+        <textarea id="detail" placeholder="Peralatan: ...&#10;Elemen: ..."></textarea>
       </div>
 
+      <!-- Warna -->
+      <div class="row2">
+        <div class="field">
+          <label class="lbl">Warna Utama <span class="desc">(hex)</span></label>
+          <div class="color-row">
+            <input type="color" id="warnaUtama" value="#1F2F65" oninput="syncHex('warnaUtama','warnaUtamaHex')" />
+            <input type="text" id="warnaUtamaHex" value="#1F2F65" oninput="syncColor('warnaUtamaHex','warnaUtama')" />
+          </div>
+        </div>
+        <div class="field">
+          <label class="lbl">Warna Aksen <span class="desc">(hex)</span></label>
+          <div class="color-row">
+            <input type="color" id="warnaAksen" value="#C9A227" oninput="syncHex('warnaAksen','warnaAksenHex')" />
+            <input type="text" id="warnaAksenHex" value="#C9A227" oninput="syncColor('warnaAksenHex','warnaAksen')" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Koin -->
       <div class="field">
         <label class="check">
           <input type="checkbox" id="koin" checked />
@@ -282,34 +327,31 @@
         </label>
       </div>
 
-      <!-- MOCKUP HP -->
+      <!-- Mockup HP -->
       <div class="field">
         <label class="check">
-          <input type="checkbox" id="mockupOn" onchange="toggleMockup()" />
-          <span>Tampilkan mockup HP <small>smartphone di dalam poster</small></span>
+          <input type="checkbox" id="mockup" onchange="toggleMockup()" />
+          <span>Tampilkan mockup HP <small>gambar smartphone menampilkan aplikasi</small></span>
         </label>
-        <div class="mockup-sub" id="mockupSub" style="display:none;">
-          <div>
-            <label class="lbl">Posisi mockup</label>
+        <div class="sub hide" id="mockupSub">
+          <div class="field">
+            <label class="lbl">Posisi HP</label>
             <select id="mockupPosisi">
-              <option value="kanan bawah" selected>Kanan bawah</option>
-              <option value="kiri bawah">Kiri bawah</option>
+              <option value="pojok kanan bawah" selected>Kanan bawah</option>
+              <option value="pojok kiri bawah">Kiri bawah</option>
               <option value="tengah bawah">Tengah bawah</option>
-              <option value="kanan tengah">Kanan tengah</option>
+              <option value="sisi kanan tengah">Kanan tengah</option>
             </select>
           </div>
-          <div>
-            <label class="lbl">Isi layar</label>
+          <div class="field" style="margin-bottom:0;">
+            <label class="lbl">Isi layar HP</label>
             <select id="mockupIsi" onchange="toggleMockupIsiLain()">
               <option value="Beranda aplikasi Zasha" selected>Beranda aplikasi Zasha</option>
-              <option value="Halaman daftar order di sekitar">Halaman daftar order di sekitar</option>
+              <option value="Halaman daftar order di sekitar">Daftar order di sekitar</option>
               <option value="Katalog jastip">Katalog jastip</option>
-              <option value="__lain__">Lainnya (ketik sendiri)</option>
+              <option value="__lain">Lainnya (ketik sendiri)</option>
             </select>
-          </div>
-          <div id="mockupIsiLainWrap" style="display:none;">
-            <label class="lbl">Isi layar (ketik)</label>
-            <input type="text" id="mockupIsiLain" placeholder="Deskripsikan isi layar..." />
+            <input type="text" id="mockupIsiLain" class="hide" style="margin-top:8px;" placeholder="Deskripsi isi layar HP" />
           </div>
         </div>
       </div>
@@ -320,7 +362,7 @@
       </div>
 
       <div class="note">
-        <b>Catatan:</b> bagian yang tetap (rasio, warna, gaya judul, footer 3 kolom, tipografi, negative prompt) sudah dikunci otomatis — kamu cukup isi konten di atas.
+        <b>Catatan:</b> gaya judul, footer 3 kolom, tipografi &amp; negative prompt sudah dikunci otomatis. Pilih jenis jasa untuk mengisi cepat, atau pilih <b>Custom</b> untuk bereksperimen dari nol.
       </div>
 
     </div>
@@ -336,7 +378,7 @@
         <span class="hint">siap copy</span>
       </div>
       <div class="card-body">
-        <div class="out empty" id="output">Isi form di kiri, lalu tekan “Generate prompt”. Hasilnya muncul di sini.</div>
+        <div class="out empty" id="output">Pilih jenis jasa di kiri, lalu tekan “Generate prompt”. Hasilnya muncul di sini.</div>
         <div class="out-actions" id="outActions" style="display:none;">
           <button class="btn btn-gold" style="flex:1" onclick="copyOut()">Salin prompt</button>
           <button class="btn btn-ghost" onclick="saveHistory()">Simpan ke riwayat</button>
@@ -355,7 +397,7 @@
           <div class="hist-empty">Belum ada riwayat. Generate lalu simpan untuk menyimpan prompt bagus.</div>
         </div>
         <div class="note" id="fbNote" style="display:none;">
-          <b>Riwayat lokal:</b> tersimpan di browser ini saja. Biar bisa diakses dari HP/laptop lain, isi konfigurasi Firebase di dalam file (bagian <b>firebaseConfig</b>).
+          <b>Riwayat lokal:</b> tersimpan di browser ini saja. Isi konfigurasi Firebase di dalam file untuk sinkron antar device.
         </div>
       </div>
     </div>
@@ -366,18 +408,11 @@
 
 <div class="toast" id="toast"></div>
 
-<!-- Firebase (opsional, untuk sinkron riwayat antar device) -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 
 <script>
-/* =========================================================
-   KONFIGURASI FIREBASE (OPSIONAL)
-   ---------------------------------------------------------
-   Biarkan apa adanya = riwayat tersimpan di browser ini saja.
-   Mau sinkron antar device? Ganti nilai di bawah dengan
-   config Firebase Realtime Database punyamu, lalu set rules.
-   ========================================================= */
+/* ================= KONFIGURASI FIREBASE ================= */
 const firebaseConfig = {
   apiKey: "AIzaSyCRtw3WFD4AxFBuLZ9699OT0eHO4VdTXAs",
   authDomain: "zasha-promt.firebaseapp.com",
@@ -388,7 +423,156 @@ const firebaseConfig = {
   appId: "1:125502291490:web:28b2e9179a5429d62a547b"
 };
 
-/* ---------- Skeleton tetap (jangan diubah lewat form) ---------- */
+/* ================= PRESET 13 JENIS JASA ================= */
+const PRESETS = {
+  rewang:{
+    judul1:"BUTUH BANTUAN?", judul2:"REWANG NIKAHAN",
+    objek:"Beberapa ibu-ibu rewang khas kampung Jawa sedang bergotong royong di dapur hajatan.",
+    aktivitas:"Memasak dalam panci besar, menata hidangan, dan menyiapkan nasi kotak dengan cekatan.",
+    ekspresi:"Ceria, guyub, saling bekerja sama, sesekali tertawa.",
+    pakaian:"Kerudung dan daster batik, memakai celemek, lengan digulung.",
+    latar:"Dapur hajatan kampung dengan tenda terpal, tungku besar, tumpukan sayur dan bumbu, suasana ramai gotong royong.",
+    nuansa:"Hangat, guyub, kekeluargaan, khas hajatan desa Indonesia.",
+    detail:"Peralatan: panci besar, dandang, wajan raksasa, keranjang bumbu.\nHidangan: nasi kotak, ayam, sayur lodeh, kerupuk.",
+    hpisi:"Halaman daftar order di sekitar"
+  },
+  bangunan:{
+    judul1:"PUNYA KEAHLIAN?", judul2:"TUKANG BANGUNAN",
+    objek:"Seorang tukang bangunan pria Indonesia yang gagah, bersih, dan bersemangat.",
+    aktivitas:"Mengangkat ember berisi adukan semen di bahu sambil mengacungkan jempol ke kamera.",
+    ekspresi:"Tersenyum percaya diri, ramah, menatap ke kamera.",
+    pakaian:"Kaos lengan panjang navy, helm proyek kuning, sarung tangan kerja.",
+    latar:"Lokasi proyek bangunan setengah jadi, tiang beton, bata tersusun rapi, langit pagi cerah.",
+    nuansa:"Kuat, terpercaya, profesional, penuh semangat kerja.",
+    detail:"Peralatan: cetok, ember cor, waterpass, meteran.\nSuasana: sibuk namun tertata rapi.",
+    hpisi:"Halaman daftar order di sekitar"
+  },
+  coding:{
+    judul1:"BIKIN APP & WEB", judul2:"JASA CODING",
+    objek:"Seorang programmer muda Indonesia yang rapi, fokus, dan cerdas.",
+    aktivitas:"Mengetik di laptop dengan layar menampilkan baris kode berwarna, secangkir kopi di samping.",
+    ekspresi:"Fokus, tenang, sedikit tersenyum puas.",
+    pakaian:"Hoodie atau kemeja kasual navy, kacamata.",
+    latar:"Ruang kerja modern minimalis, meja kayu, tanaman kecil, cahaya hangat dari jendela.",
+    nuansa:"Modern, cerdas, profesional, sentuhan teknologi.",
+    detail:"Elemen: laptop, layar kode, cangkir kopi.\nIkon melayang: simbol kurung kurawal, </>, ikon wifi.",
+    hpisi:"Beranda aplikasi Zasha"
+  },
+  jastip:{
+    judul1:"MALES KELUAR?", judul2:"JASA TITIP",
+    objek:"Seorang kurir jasa titip muda Indonesia yang ramah dan energik.",
+    aktivitas:"Membawa tas belanja dan kantong makanan sambil menunjukkan ponsel berisi aplikasi.",
+    ekspresi:"Ceria, ramah, penuh semangat.",
+    pakaian:"Kaos navy berlogo, topi, tas selempang kurir.",
+    latar:"Depan warung dan pasar tradisional, motor terparkir dengan box, suasana pagi cerah.",
+    nuansa:"Praktis, cepat, ramah, solutif.",
+    detail:"Barang: kantong makanan, tas belanja, struk belanja.\nKendaraan: motor dengan box pengantaran.",
+    hpisi:"Katalog jastip"
+  },
+  bersih:{
+    judul1:"RUMAH KINCLONG", judul2:"BERSIH RUMAH",
+    objek:"Seorang petugas kebersihan wanita Indonesia yang rapi dan telaten.",
+    aktivitas:"Mengepel lantai hingga mengkilap sambil tersenyum ramah.",
+    ekspresi:"Ramah, ceria, telaten.",
+    pakaian:"Seragam navy bersih, celemek, sarung tangan karet.",
+    latar:"Ruang tamu rumah yang bersih dan tertata, lantai mengkilap memantulkan cahaya, suasana segar.",
+    nuansa:"Bersih, segar, rapi, menyenangkan.",
+    detail:"Peralatan: alat pel, ember, botol semprot pembersih, kemoceng.\nSuasana: wangi dan higienis.",
+    hpisi:"Halaman daftar order di sekitar"
+  },
+  rias:{
+    judul1:"TAMPIL CANTIK", judul2:"JASA RIAS",
+    objek:"Seorang perias (MUA) wanita Indonesia yang anggun dan profesional.",
+    aktivitas:"Merias wajah klien dengan kuas, hasil riasan terlihat halus dan flawless.",
+    ekspresi:"Fokus, lembut, profesional.",
+    pakaian:"Kemeja hitam elegan, apron makeup berisi deretan kuas.",
+    latar:"Studio rias terang, cermin berlampu bulat, palet makeup tertata rapi.",
+    nuansa:"Elegan, cantik, profesional, glamor lembut.",
+    detail:"Alat: kuas makeup, palet warna, beauty blender.\nHasil: wajah halus dan flawless.",
+    hpisi:"Beranda aplikasi Zasha"
+  },
+  desain:{
+    judul1:"DESAIN KEREN", judul2:"JASA DESAIN",
+    objek:"Seorang desainer grafis muda Indonesia yang kreatif dan bergaya.",
+    aktivitas:"Menggambar di tablet grafis dengan stylus, layar menampilkan desain warna-warni.",
+    ekspresi:"Kreatif, antusias, fokus.",
+    pakaian:"Kaos kasual dengan kemeja flanel terbuka.",
+    latar:"Meja kerja kreatif, sketsa berserakan rapi, pensil warna, monitor desain, cahaya hangat.",
+    nuansa:"Kreatif, modern, penuh warna, artistik.",
+    detail:"Alat: pen tablet, monitor desain, sketsa.\nElemen: percikan warna, ikon kuas dan pena.",
+    hpisi:"Beranda aplikasi Zasha"
+  },
+  tulis:{
+    judul1:"BUTUH ARTIKEL?", judul2:"JASA TULIS",
+    objek:"Seorang penulis Indonesia yang tenang, rapi, dan berpikir dalam.",
+    aktivitas:"Menulis di laptop sambil memegang secangkir teh, buku catatan terbuka di meja.",
+    ekspresi:"Tenang, berpikir, sedikit tersenyum.",
+    pakaian:"Sweater rajut hangat, kacamata.",
+    latar:"Sudut baca yang nyaman, rak buku, tanaman hijau, lampu meja hangat.",
+    nuansa:"Tenang, cerdas, hangat, bernuansa literasi.",
+    detail:"Elemen: laptop, tumpukan buku, pena, cangkir teh.\nIkon melayang: huruf A, pena bulu.",
+    hpisi:"Beranda aplikasi Zasha"
+  },
+  servishp:{
+    judul1:"HP RUSAK?", judul2:"SERVIS HP & LAPTOP",
+    objek:"Seorang teknisi gadget pria Indonesia yang teliti dan ahli.",
+    aktivitas:"Memperbaiki ponsel yang terbuka menggunakan obeng presisi dan pinset.",
+    ekspresi:"Fokus, teliti, percaya diri.",
+    pakaian:"Kaos polo navy, apron teknisi, lampu kaca pembesar di kepala.",
+    latar:"Meja servis rapi, komponen elektronik tertata, alat solder, cahaya lampu kerja terang.",
+    nuansa:"Presisi, terpercaya, teknis, cekatan.",
+    detail:"Alat: obeng presisi, pinset, solder.\nObjek: HP terbuka, laptop, komponen kecil.",
+    hpisi:"Halaman daftar order di sekitar"
+  },
+  elektronik:{
+    judul1:"ELEKTRONIK NGADAT?", judul2:"SERVIS ELEKTRONIK",
+    objek:"Seorang tukang servis elektronik pria Indonesia yang berpengalaman.",
+    aktivitas:"Memperbaiki mesin cuci sambil memeriksa kabel dengan alat ukur.",
+    ekspresi:"Ramah, yakin, berpengalaman.",
+    pakaian:"Kaos navy, wearpack kerja, sabuk perkakas.",
+    latar:"Bengkel elektronik, tumpukan alat rumah tangga, rak sparepart tertata.",
+    nuansa:"Andal, berpengalaman, terpercaya.",
+    detail:"Alat: multimeter, obeng, tang.\nObjek: mesin cuci, kipas angin, TV, magic com.",
+    hpisi:"Halaman daftar order di sekitar"
+  },
+  pijat:{
+    judul1:"BADAN PEGAL?", judul2:"JASA PIJAT",
+    objek:"Seorang terapis pijat wanita Indonesia yang ramah dan profesional.",
+    aktivitas:"Memijat bahu klien dengan lembut dan tenang.",
+    ekspresi:"Tenang, ramah, menenangkan.",
+    pakaian:"Seragam terapis rapi berwarna navy lembut.",
+    latar:"Ruang pijat yang nyaman, handuk bersih terlipat, aroma terapi, cahaya redup hangat.",
+    nuansa:"Rileks, nyaman, menyegarkan, menenangkan.",
+    detail:"Elemen: handuk bersih, botol minyak aromaterapi, lilin.\nSuasana: tenang dan higienis.",
+    hpisi:"Beranda aplikasi Zasha"
+  },
+  leskitab:{
+    judul1:"NGAJI YUK!", judul2:"LES KITAB",
+    objek:"Seorang ustadz muda Indonesia yang ramah dan berwibawa.",
+    aktivitas:"Mengajar mengaji sambil menunjuk kitab yang terbuka di hadapan santri.",
+    ekspresi:"Ramah, sabar, teduh, tersenyum.",
+    pakaian:"Baju koko putih atau navy, peci hitam, sarung.",
+    latar:"Ruang belajar mengaji sederhana, rehal kayu, kitab, karpet, suasana teduh dan islami.",
+    nuansa:"Teduh, religius, hangat, penuh berkah.",
+    detail:"Elemen: kitab, rehal kayu, tasbih.\nSuasana: tenang dan islami.",
+    hpisi:"Beranda aplikasi Zasha"
+  },
+  curhat:{
+    judul1:"BUTUH DIDENGAR?", judul2:"CURAHAN HATI",
+    objek:"Dua orang teman Indonesia sedang duduk mengobrol dengan akrab.",
+    aktivitas:"Satu orang mendengarkan dengan penuh perhatian sambil menikmati kopi hangat.",
+    ekspresi:"Hangat, empati, tenang, saling percaya.",
+    pakaian:"Pakaian kasual yang rapi dan nyaman.",
+    latar:"Kafe atau teras yang tenang dan nyaman, dua cangkir kopi, cahaya sore hangat.",
+    nuansa:"Hangat, empati, aman, penuh perhatian.",
+    detail:"Elemen: dua cangkir kopi hangat, suasana tenang.\nSimbol: hati kecil yang lembut.",
+    hpisi:"Beranda aplikasi Zasha"
+  }
+};
+
+const TEXT_FIELDS = ["judul1","judul2","objek","aktivitas","ekspresi","pakaian","latar","nuansa","detail"];
+
+/* ---------- Skeleton tetap ---------- */
 const FIXED = {
   gaya: "Poster promosi modern, premium, ilustrasi semi realistis, clean design, kualitas sangat tajam, pencahayaan pagi yang hangat, komposisi simetris, cocok untuk media sosial.",
   posisi: "Berada di tengah poster sebagai fokus utama.",
@@ -401,47 +585,66 @@ const FIXED = {
 
 let lastPrompt = "";
 
+function fillPreset(key){
+  if(key === "custom"){
+    TEXT_FIELDS.forEach(id=>document.getElementById(id).value="");
+    document.getElementById("mockup").checked = false;
+    toggleMockup();
+    toast("Mode custom — silakan isi sendiri");
+    return;
+  }
+  const p = PRESETS[key];
+  if(!p) return;
+  TEXT_FIELDS.forEach(id=>{ if(p[id]!==undefined) document.getElementById(id).value = p[id]; });
+  // mockup HP nyala + isi layar sesuai preset
+  document.getElementById("mockup").checked = true;
+  toggleMockup();
+  const isiSel = document.getElementById("mockupIsi");
+  const found = Array.from(isiSel.options).some(o=>o.value===p.hpisi);
+  if(found){ isiSel.value = p.hpisi; }
+  else { isiSel.value = "__lain"; document.getElementById("mockupIsiLain").value = p.hpisi; }
+  toggleMockupIsiLain();
+  toast("Terisi: " + p.judul2);
+}
+
 function val(id, fallback){
-  const v = document.getElementById(id).value.trim();
+  const el = document.getElementById(id);
+  const v = el ? el.value.trim() : "";
   return v || fallback || "";
 }
 
 function generate(){
-  const judul1 = val("judul1","FITUR BARU UNLOCK").toUpperCase();
-  const judul2 = val("judul2","MLIJO").toUpperCase();
+  const judul1 = val("judul1").toUpperCase();
+  const judul2 = val("judul2").toUpperCase();
   const objek = val("objek");
   const aktivitas = val("aktivitas");
-  const ekspresi = val("ekspresi","Tersenyum ramah, percaya diri, melihat ke arah kamera.");
+  const ekspresi = val("ekspresi");
   const pakaian = val("pakaian");
   const latar = val("latar");
-  const nuansa = val("nuansa","Hangat, ramah, profesional, khas Indonesia.");
+  const nuansa = val("nuansa");
   const detailRaw = document.getElementById("detail").value.trim();
   const koin = document.getElementById("koin").checked;
 
-  // Ukuran
-  const ukuranVal = document.getElementById("ukuran").value; // "1:1|2048 x 2048"
-  const [rasio, resolusi] = ukuranVal.split("|");
+  if(!objek){ toast("Isi dulu Objek Utama (atau pilih jenis jasa)"); return; }
 
-  // Warna
-  const hex1 = (document.getElementById("warnaUtamaHex").value.trim() || "#1F2F65").toUpperCase();
-  const hex2 = (document.getElementById("warnaAksenHex").value.trim() || "#C9A227").toUpperCase();
-  const warnaLine = "Navy/Utama (" + hex1 + "), Emas/Aksen (" + hex2 + "), Putih.";
+  // ukuran
+  const ukr = document.getElementById("ukuran").value.split("|");
+  const rasio = ukr[0] || "1:1 (Persegi)";
+  const resolusi = ukr[1] || "2048 x 2048";
 
-  // Mockup HP
-  const mockupOn = document.getElementById("mockupOn").checked;
+  // warna
+  const cUtama = document.getElementById("warnaUtamaHex").value.trim().toUpperCase() || "#1F2F65";
+  const cAksen = document.getElementById("warnaAksenHex").value.trim().toUpperCase() || "#C9A227";
+  const warnaLine = "Warna utama gelap (" + cUtama + "), warna aksen emas (" + cAksen + "), dan putih.";
+
+  // mockup HP
   let mockupLine = "Tidak ada.";
-  if(mockupOn){
-    const posisiEl = document.getElementById("mockupPosisi");
-    const isiEl = document.getElementById("mockupIsi");
-    const posisi = posisiEl.options[posisiEl.selectedIndex].value;
-    const isiVal = isiEl.value;
-    const isi = isiVal === "__lain__"
-      ? (document.getElementById("mockupIsiLain").value.trim() || "aplikasi")
-      : isiVal;
-    mockupLine = "Mockup smartphone di " + posisi + ", menampilkan " + isi + ", layar tajam, bezel tipis, tampilan aplikasi rapi.";
+  if(document.getElementById("mockup").checked){
+    const pos = document.getElementById("mockupPosisi").value;
+    let isi = document.getElementById("mockupIsi").value;
+    if(isi === "__lain"){ isi = document.getElementById("mockupIsiLain").value.trim() || "aplikasi Zasha"; }
+    mockupLine = "Mockup smartphone di " + pos + ", menampilkan " + isi + ", layar tajam, bezel tipis, tampilan aplikasi rapi.";
   }
-
-  if(!objek){ toast("Isi dulu Objek Utama"); return; }
 
   let lines = [];
   lines.push("Rasio: " + rasio);
@@ -455,7 +658,6 @@ function generate(){
   if(ekspresi) lines.push("Ekspresi: " + ekspresi);
   if(pakaian) lines.push("Pakaian: " + pakaian);
 
-  // detail tambahan, satu per baris
   if(detailRaw){
     detailRaw.split("\n").map(s=>s.trim()).filter(Boolean).forEach(d=>lines.push(d));
   }
@@ -495,40 +697,38 @@ function copyOut(){
 }
 
 function resetForm(){
-  ["judul1","judul2","objek","aktivitas","ekspresi","pakaian","latar","nuansa","detail","mockupIsiLain"]
-    .forEach(id=>document.getElementById(id).value="");
+  TEXT_FIELDS.forEach(id=>document.getElementById(id).value="");
+  document.getElementById("jenis").value = "custom";
+  document.getElementById("ukuran").selectedIndex = 0;
   document.getElementById("koin").checked = true;
-  document.getElementById("ukuran").value = "1:1|2048 x 2048";
-  document.getElementById("warnaUtamaPicker").value = "#1F2F65";
+  document.getElementById("warnaUtama").value = "#1F2F65";
   document.getElementById("warnaUtamaHex").value = "#1F2F65";
-  document.getElementById("warnaAksenPicker").value = "#C9A227";
+  document.getElementById("warnaAksen").value = "#C9A227";
   document.getElementById("warnaAksenHex").value = "#C9A227";
-  document.getElementById("mockupOn").checked = false;
-  document.getElementById("mockupSub").style.display = "none";
-  document.getElementById("mockupPosisi").selectedIndex = 0;
+  document.getElementById("mockup").checked = false;
   document.getElementById("mockupIsi").selectedIndex = 0;
-  document.getElementById("mockupIsiLainWrap").style.display = "none";
+  document.getElementById("mockupIsiLain").value = "";
+  toggleMockup();
   toast("Form dikosongkan");
 }
 
+/* ---------- toggle & sync ---------- */
 function toggleMockup(){
-  document.getElementById("mockupSub").style.display =
-    document.getElementById("mockupOn").checked ? "flex" : "none";
+  const on = document.getElementById("mockup").checked;
+  document.getElementById("mockupSub").classList.toggle("hide", !on);
 }
-
 function toggleMockupIsiLain(){
-  document.getElementById("mockupIsiLainWrap").style.display =
-    document.getElementById("mockupIsi").value === "__lain__" ? "block" : "none";
+  const lain = document.getElementById("mockupIsi").value === "__lain";
+  document.getElementById("mockupIsiLain").classList.toggle("hide", !lain);
 }
-
-function syncColor(pickerId, hexId){
-  document.getElementById(hexId).value = document.getElementById(pickerId).value.toUpperCase();
+function syncHex(colorId, hexId){
+  document.getElementById(hexId).value = document.getElementById(colorId).value.toUpperCase();
 }
-
-function syncHex(hexId, pickerId){
-  const v = document.getElementById(hexId).value.trim();
-  if(/^#[0-9A-Fa-f]{6}$/.test(v)){
-    document.getElementById(pickerId).value = v;
+function syncColor(hexId, colorId){
+  let v = document.getElementById(hexId).value.trim();
+  if(/^#?[0-9a-fA-F]{6}$/.test(v)){
+    if(v[0] !== "#") v = "#" + v;
+    document.getElementById(colorId).value = v;
   }
 }
 
@@ -604,7 +804,7 @@ function listenFirebase(){
   db.ref("prompts").orderByChild("ts").on("value", snap=>{
     const list = [];
     snap.forEach(c=>{ const v=c.val(); v.id=c.key; list.push(v); });
-    list.reverse(); // terbaru di atas
+    list.reverse();
     renderHistory(list);
   });
 }
@@ -637,11 +837,9 @@ function renderHistory(list){
   });
 }
 
-/* local helpers */
 function loadLocal(){ try{ return JSON.parse(localStorage.getItem(LS_KEY))||[]; }catch(e){ return []; } }
 function saveLocal(l){ try{ localStorage.setItem(LS_KEY, JSON.stringify(l)); }catch(e){} }
 
-/* util */
 function fmtTime(ts){
   const d = new Date(ts);
   return d.toLocaleDateString("id-ID",{day:"2-digit",month:"short",year:"numeric"}) +
