@@ -87,6 +87,25 @@
     box-shadow:0 0 0 3px rgba(31,47,101,.08);
   }
   textarea{resize:vertical;min-height:62px;line-height:1.45;}
+  select{
+    width:100%;font-family:inherit;font-size:13.5px;color:var(--ink);
+    background:var(--paper);border:1px solid var(--line);border-radius:10px;
+    padding:10px 12px;transition:border-color .15s,background .15s;
+    appearance:none;-webkit-appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B7290' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 12px center;cursor:pointer;
+  }
+  select:focus{
+    outline:none;border-color:var(--navy);background-color:var(--white);
+    box-shadow:0 0 0 3px rgba(31,47,101,.08);
+  }
+  .color-row{display:flex;align-items:center;gap:8px;}
+  .color-row input[type=color]{
+    width:38px;height:38px;border:1px solid var(--line);border-radius:8px;
+    padding:2px;background:var(--paper);cursor:pointer;flex-shrink:0;
+  }
+  .color-row input[type=text]{flex:1;}
+  .mockup-sub{margin-top:10px;display:flex;flex-direction:column;gap:10px;}
   .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
   @media(max-width:480px){.row2{grid-template-columns:1fr;}}
 
@@ -179,6 +198,36 @@
     </div>
     <div class="card-body">
 
+      <!-- UKURAN -->
+      <div class="field">
+        <label class="lbl">Ukuran poster</label>
+        <select id="ukuran">
+          <option value="1:1|2048 x 2048" selected>1:1 — 2048 x 2048 (Persegi)</option>
+          <option value="4:5|1638 x 2048">4:5 — 1638 x 2048 (Portrait)</option>
+          <option value="9:16|1152 x 2048">9:16 — 1152 x 2048 (Story)</option>
+          <option value="16:9|2048 x 1152">16:9 — 2048 x 1152 (Landscape)</option>
+          <option value="3:4|1536 x 2048">3:4 — 1536 x 2048 (Portrait 3:4)</option>
+        </select>
+      </div>
+
+      <!-- WARNA -->
+      <div class="row2">
+        <div class="field">
+          <label class="lbl">Warna Utama</label>
+          <div class="color-row">
+            <input type="color" id="warnaUtamaPicker" value="#1F2F65" oninput="syncColor('warnaUtamaPicker','warnaUtamaHex')" />
+            <input type="text" id="warnaUtamaHex" value="#1F2F65" maxlength="7" placeholder="#1F2F65" oninput="syncHex('warnaUtamaHex','warnaUtamaPicker')" />
+          </div>
+        </div>
+        <div class="field">
+          <label class="lbl">Warna Aksen</label>
+          <div class="color-row">
+            <input type="color" id="warnaAksenPicker" value="#C9A227" oninput="syncColor('warnaAksenPicker','warnaAksenHex')" />
+            <input type="text" id="warnaAksenHex" value="#C9A227" maxlength="7" placeholder="#C9A227" oninput="syncHex('warnaAksenHex','warnaAksenPicker')" />
+          </div>
+        </div>
+      </div>
+
       <div class="row2">
         <div class="field">
           <label class="lbl">Judul 1 <span class="desc">(putih)</span></label>
@@ -231,6 +280,38 @@
           <input type="checkbox" id="koin" checked />
           <span>Tampilkan koin "Rp" emas <small>di pojok kanan atas</small></span>
         </label>
+      </div>
+
+      <!-- MOCKUP HP -->
+      <div class="field">
+        <label class="check">
+          <input type="checkbox" id="mockupOn" onchange="toggleMockup()" />
+          <span>Tampilkan mockup HP <small>smartphone di dalam poster</small></span>
+        </label>
+        <div class="mockup-sub" id="mockupSub" style="display:none;">
+          <div>
+            <label class="lbl">Posisi mockup</label>
+            <select id="mockupPosisi">
+              <option value="kanan bawah" selected>Kanan bawah</option>
+              <option value="kiri bawah">Kiri bawah</option>
+              <option value="tengah bawah">Tengah bawah</option>
+              <option value="kanan tengah">Kanan tengah</option>
+            </select>
+          </div>
+          <div>
+            <label class="lbl">Isi layar</label>
+            <select id="mockupIsi" onchange="toggleMockupIsiLain()">
+              <option value="Beranda aplikasi Zasha" selected>Beranda aplikasi Zasha</option>
+              <option value="Halaman daftar order di sekitar">Halaman daftar order di sekitar</option>
+              <option value="Katalog jastip">Katalog jastip</option>
+              <option value="__lain__">Lainnya (ketik sendiri)</option>
+            </select>
+          </div>
+          <div id="mockupIsiLainWrap" style="display:none;">
+            <label class="lbl">Isi layar (ketik)</label>
+            <input type="text" id="mockupIsiLain" placeholder="Deskripsikan isi layar..." />
+          </div>
+        </div>
       </div>
 
       <div class="actions">
@@ -309,10 +390,7 @@ const firebaseConfig = {
 
 /* ---------- Skeleton tetap (jangan diubah lewat form) ---------- */
 const FIXED = {
-  rasio: "1:1 (Persegi)",
-  resolusi: "2048 x 2048",
   gaya: "Poster promosi modern, premium, ilustrasi semi realistis, clean design, kualitas sangat tajam, pencahayaan pagi yang hangat, komposisi simetris, cocok untuk media sosial.",
-  warna: "Navy Gelap (#1F2F65), Emas (#C9A227), Putih.",
   posisi: "Berada di tengah poster sebagai fokus utama.",
   styleJudul: "Huruf kapital besar, tebal, modern, efek 3D premium, Judul 1 berwarna putih, Judul 2 berwarna emas metalik mengkilap.",
   styleFooter: 'Tanpa tanda "=". Judul website berwarna emas. Subjudul berwarna putih. Ikon berada di dalam lingkaran putih. Setiap kolom dipisahkan garis vertikal tipis berwarna emas.',
@@ -340,13 +418,36 @@ function generate(){
   const detailRaw = document.getElementById("detail").value.trim();
   const koin = document.getElementById("koin").checked;
 
+  // Ukuran
+  const ukuranVal = document.getElementById("ukuran").value; // "1:1|2048 x 2048"
+  const [rasio, resolusi] = ukuranVal.split("|");
+
+  // Warna
+  const hex1 = (document.getElementById("warnaUtamaHex").value.trim() || "#1F2F65").toUpperCase();
+  const hex2 = (document.getElementById("warnaAksenHex").value.trim() || "#C9A227").toUpperCase();
+  const warnaLine = "Navy/Utama (" + hex1 + "), Emas/Aksen (" + hex2 + "), Putih.";
+
+  // Mockup HP
+  const mockupOn = document.getElementById("mockupOn").checked;
+  let mockupLine = "Tidak ada.";
+  if(mockupOn){
+    const posisiEl = document.getElementById("mockupPosisi");
+    const isiEl = document.getElementById("mockupIsi");
+    const posisi = posisiEl.options[posisiEl.selectedIndex].value;
+    const isiVal = isiEl.value;
+    const isi = isiVal === "__lain__"
+      ? (document.getElementById("mockupIsiLain").value.trim() || "aplikasi")
+      : isiVal;
+    mockupLine = "Mockup smartphone di " + posisi + ", menampilkan " + isi + ", layar tajam, bezel tipis, tampilan aplikasi rapi.";
+  }
+
   if(!objek){ toast("Isi dulu Objek Utama"); return; }
 
   let lines = [];
-  lines.push("Rasio: " + FIXED.rasio);
-  lines.push("Resolusi: " + FIXED.resolusi);
+  lines.push("Rasio: " + rasio);
+  lines.push("Resolusi: " + resolusi);
   lines.push("Gaya: " + FIXED.gaya);
-  lines.push("Warna Utama: " + FIXED.warna);
+  lines.push("Warna Utama: " + warnaLine);
   if(nuansa) lines.push("Nuansa: " + nuansa);
   if(latar) lines.push("Latar Belakang: " + latar);
   lines.push("Objek Utama: " + objek);
@@ -369,7 +470,7 @@ function generate(){
   lines.push("Panel Bonus: Tidak ada.");
   lines.push("Koin Dekorasi: " + (koin ? 'Koin emas bertuliskan "Rp" mengkilap di pojok kanan atas.' : "Tidak ada."));
   lines.push("CTA Utama: Tidak ada.");
-  lines.push("Mockup Smartphone: Tidak ada.");
+  lines.push("Mockup Smartphone: " + mockupLine);
   lines.push("Footer: Panel penuh berwarna navy gelap dengan sudut membulat di bagian paling bawah.");
   lines.push("Footer Kolom 1: Icon Globe. Judul: zasha.online. Subjudul: web pelanggan.");
   lines.push("Footer Kolom 2: Icon Users. Judul: mitra.zasha.online. Subjudul: untuk Mitra.");
@@ -394,10 +495,41 @@ function copyOut(){
 }
 
 function resetForm(){
-  ["judul1","judul2","objek","aktivitas","ekspresi","pakaian","latar","nuansa","detail"]
+  ["judul1","judul2","objek","aktivitas","ekspresi","pakaian","latar","nuansa","detail","mockupIsiLain"]
     .forEach(id=>document.getElementById(id).value="");
   document.getElementById("koin").checked = true;
+  document.getElementById("ukuran").value = "1:1|2048 x 2048";
+  document.getElementById("warnaUtamaPicker").value = "#1F2F65";
+  document.getElementById("warnaUtamaHex").value = "#1F2F65";
+  document.getElementById("warnaAksenPicker").value = "#C9A227";
+  document.getElementById("warnaAksenHex").value = "#C9A227";
+  document.getElementById("mockupOn").checked = false;
+  document.getElementById("mockupSub").style.display = "none";
+  document.getElementById("mockupPosisi").selectedIndex = 0;
+  document.getElementById("mockupIsi").selectedIndex = 0;
+  document.getElementById("mockupIsiLainWrap").style.display = "none";
   toast("Form dikosongkan");
+}
+
+function toggleMockup(){
+  document.getElementById("mockupSub").style.display =
+    document.getElementById("mockupOn").checked ? "flex" : "none";
+}
+
+function toggleMockupIsiLain(){
+  document.getElementById("mockupIsiLainWrap").style.display =
+    document.getElementById("mockupIsi").value === "__lain__" ? "block" : "none";
+}
+
+function syncColor(pickerId, hexId){
+  document.getElementById(hexId).value = document.getElementById(pickerId).value.toUpperCase();
+}
+
+function syncHex(hexId, pickerId){
+  const v = document.getElementById(hexId).value.trim();
+  if(/^#[0-9A-Fa-f]{6}$/.test(v)){
+    document.getElementById(pickerId).value = v;
+  }
 }
 
 /* ---------------- RIWAYAT (Firebase / localStorage) ---------------- */
